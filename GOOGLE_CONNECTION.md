@@ -62,7 +62,7 @@ curl -i -X POST "https://contoh-subdomain.ngrok-free.app/api/kartu-kendali" \
   -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "wilayah": "SETU",
+    "kecamatan": "SETU",
     "nama_ppl": "PPL Uji",
     "nama_pml": "PML Uji",
     "nama_responden": "Responden Uji",

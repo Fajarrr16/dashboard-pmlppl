@@ -1,6 +1,6 @@
 # Integrasi Google Apps Script
 
-Dokumen ini menyediakan satu script reusable untuk 7 spreadsheet wilayah. Script hanya membaca spreadsheet dan mengirim data ke Laravel API; script tidak mengubah data di Google Spreadsheet.
+Dokumen ini menyediakan satu script reusable untuk 7 spreadsheet kecamatan. Script hanya membaca spreadsheet dan mengirim data ke Laravel API; script tidak mengubah data di Google Spreadsheet.
 
 ## Konfigurasi Script Properties
 
@@ -10,25 +10,25 @@ Buka spreadsheet, pilih **Extensions > Apps Script**, lalu buka **Project Settin
 |---|---|
 | `KARTU_API_URL` | URL lengkap endpoint POST Laravel, misalnya `https://subdomain.ngrok-free.app/api/kartu-kendali` |
 | `KARTU_API_TOKEN` | Nilai `KARTU_KENDALI_API_TOKEN` dari environment Laravel |
-| `KARTU_WILAYAH` | Salah satu dari 7 wilayah yang sesuai dengan spreadsheet |
+| `KARTU_KECAMATAN` | Salah satu dari 7 kecamatan yang sesuai dengan spreadsheet |
 | `KARTU_SOURCE_SHEET` | Nama sumber; boleh dikosongkan agar memakai nama spreadsheet aktif |
 
 Jangan menaruh token di source code. Script membaca token dari Script Properties.
 
 ## Script lengkap
 
-Salin seluruh kode berikut ke setiap spreadsheet. Kode yang sama dipakai untuk semua wilayah; hanya `KARTU_WILAYAH` yang berbeda.
+Salin seluruh kode berikut ke setiap spreadsheet. Kode yang sama dipakai untuk semua kecamatan; hanya `KARTU_KECAMATAN` yang berbeda.
 
 ```javascript
 const CONFIG_KEYS = {
   apiUrl: 'KARTU_API_URL',
   apiToken: 'KARTU_API_TOKEN',
-  wilayah: 'KARTU_WILAYAH',
+  kecamatan: 'KARTU_KECAMATAN',
   sourceSheet: 'KARTU_SOURCE_SHEET',
   lastProcessedRow: 'KARTU_LAST_PROCESSED_ROW',
 };
 
-const REQUIRED_WILAYAH = [
+const REQUIRED_KECAMATAN = [
   'SETU',
   'SERPONG',
   'PAMULANG',
@@ -43,16 +43,16 @@ function getConfig_() {
   const config = {
     apiUrl: properties.getProperty(CONFIG_KEYS.apiUrl),
     apiToken: properties.getProperty(CONFIG_KEYS.apiToken),
-    wilayah: properties.getProperty(CONFIG_KEYS.wilayah),
+    kecamatan: properties.getProperty(CONFIG_KEYS.kecamatan),
     sourceSheet: properties.getProperty(CONFIG_KEYS.sourceSheet),
   };
 
-  if (!config.apiUrl || !config.apiToken || !config.wilayah) {
-    throw new Error('KARTU_API_URL, KARTU_API_TOKEN, dan KARTU_WILAYAH wajib diisi di Script Properties.');
+  if (!config.apiUrl || !config.apiToken || !config.kecamatan) {
+    throw new Error('KARTU_API_URL, KARTU_API_TOKEN, dan KARTU_KECAMATAN wajib diisi di Script Properties.');
   }
 
-  if (!REQUIRED_WILAYAH.includes(config.wilayah)) {
-    throw new Error('KARTU_WILAYAH tidak termasuk daftar 7 wilayah yang didukung.');
+  if (!REQUIRED_KECAMATAN.includes(config.kecamatan)) {
+    throw new Error('KARTU_KECAMATAN tidak termasuk daftar 7 kecamatan yang didukung.');
   }
 
   return config;
@@ -84,7 +84,7 @@ function headerMap_() {
     jenisresponden: 'jenis_responden',
     dokumentasi: 'dokumentasi',
     keterangan: 'keterangan',
-    wilayah: 'wilayah',
+    kecamatan: 'kecamatan',
     'source sheet': 'source_sheet',
     sourcesheet: 'source_sheet',
     externalid: 'external_id',
@@ -103,7 +103,7 @@ function buildPayload_(headers, values, config) {
     }
   });
 
-  payload.wilayah = config.wilayah;
+  payload.kecamatan = config.kecamatan;
   payload.source_sheet = config.sourceSheet || SpreadsheetApp.getActiveSpreadsheet().getName();
   payload.external_id = payload.external_id || createExternalId_(payload);
 
@@ -256,9 +256,9 @@ function resetSyncCursor() {
 
 ## Pemasangan untuk 7 spreadsheet
 
-Pasang script yang sama pada masing-masing spreadsheet dan isi `KARTU_WILAYAH` sesuai tabel berikut:
+Pasang script yang sama pada masing-masing spreadsheet dan isi `KARTU_KECAMATAN` sesuai tabel berikut:
 
-| Spreadsheet | `KARTU_WILAYAH` |
+| Spreadsheet | `KARTU_KECAMATAN` |
 |---|---|
 | Spreadsheet Setu | `SETU` |
 | Spreadsheet Serpong | `SERPONG` |
@@ -284,7 +284,7 @@ Ulangi untuk semua 7 spreadsheet.
 
 Jika event `On form submit` tidak tersedia atau tidak berjalan:
 
-1. Pastikan `KARTU_API_URL`, `KARTU_API_TOKEN`, dan `KARTU_WILAYAH` sudah diisi.
+1. Pastikan `KARTU_API_URL`, `KARTU_API_TOKEN`, dan `KARTU_KECAMATAN` sudah diisi.
 2. Jalankan fungsi `installTimeTrigger()` satu kali dari editor Apps Script.
 3. Berikan authorization.
 4. Script akan memeriksa row baru setiap 5 menit.

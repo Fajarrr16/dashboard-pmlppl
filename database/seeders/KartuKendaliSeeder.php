@@ -38,22 +38,24 @@ class KartuKendaliSeeder extends Seeder
 
         $index = 1;
 
-        foreach (array_keys($kelurahan) as $wilayah) {
+        foreach (array_keys($kelurahan) as $kecamatan) {
             for ($i = 0; $i < 5; $i++) {
                 $tanggal = fake()->dateTimeBetween('-30 days', 'today');
                 $sls = str_pad((string) fake()->numberBetween(1, 200), 3, '0', STR_PAD_LEFT);
 
                 KartuKendali::firstOrCreate(
-                    ['external_id' => "seed-{$index}", 'source_sheet' => $wilayah],
+                    ['external_id' => "seed-{$index}", 'source_sheet' => $kecamatan],
                     [
-                        'wilayah' => $wilayah,
+                        'kecamatan' => $kecamatan,
                         'timestamp_google' => $tanggal->format('m/d/Y H:i:s'),
+                        'timestamp_masuk' => $tanggal,
                         'tanggal_pendataan' => $tanggal->format('Y-m-d'),
+                        'waktu_pendataan' => $tanggal->format('Y-m-d H:i:s'),
                         'nama_ppl' => $namaPpl[$index % count($namaPpl)],
                         'nama_pml' => $namaPml[$index % count($namaPml)],
-                        'kelurahan' => $kelurahan[$wilayah][$i % count($kelurahan[$wilayah])],
+                        'kelurahan' => $kelurahan[$kecamatan][$i % count($kelurahan[$kecamatan])],
                         'sls' => $sls,
-                        'nama_responden' => 'Responden '.$wilayah.'-'.$i,
+                        'nama_responden' => 'Responden '.$kecamatan.'-'.$i,
                         'jenis_responden' => $jenisResponden[$index % count($jenisResponden)],
                         'dokumentasi' => $dokumentasi[$index % count($dokumentasi)],
                         'keterangan' => 'Data dummy uji dashboard (seed).',

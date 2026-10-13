@@ -17,12 +17,14 @@ class KartuKendaliFactory extends Factory
      */
     public function definition(): array
     {
-        $wilayah = fake()->randomElement(KartuKendali::WILAYAH);
+        $kecamatan = fake()->randomElement(KartuKendali::KECAMATAN);
 
         return [
-            'wilayah' => $wilayah,
+            'kecamatan' => $kecamatan,
             'timestamp_google' => now()->format('m/d/Y H:i:s'),
+            'timestamp_masuk' => now(),
             'tanggal_pendataan' => fake()->date(),
+            'waktu_pendataan' => now(),
             'nama_ppl' => fake()->name(),
             'nama_pml' => fake()->name(),
             'kelurahan' => fake()->city(),
@@ -37,7 +39,7 @@ class KartuKendaliFactory extends Factory
             ]),
             'dokumentasi' => null,
             'keterangan' => null,
-            'source_sheet' => $wilayah,
+            'source_sheet' => $kecamatan,
             'external_id' => fake()->unique()->uuid(),
         ];
     }

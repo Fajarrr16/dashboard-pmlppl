@@ -85,7 +85,7 @@ Untuk data dummy lokal/staging:
 php artisan db:seed
 ```
 
-Seeder membuat data fiktif dari 7 wilayah. Jangan menjalankan seeder dummy pada production yang sudah berisi data nyata.
+- Seeder membuat data fiktif dari 7 kecamatan. Jangan menjalankan seeder dummy pada production yang sudah berisi data nyata.
 
 Cek status migration:
 
@@ -126,15 +126,16 @@ php artisan optimize
 
 Dashboard menyediakan:
 
-- Total responden
-- Total PPL unik
-- Total PML unik
-- Total SLS unik
-- Statistik 7 wilayah
-- Statistik jenis responden
-- Data terbaru
+- Total responden Tangerang Selatan
+- Total PPL mengirim
+- Total PML
+- Total SLS dikerjakan
+- Rekap per kecamatan
+- Responden rata tengah per kecamatan
+- TOP PPL teratas dan terbawah
+- Data terbaru dengan tanggal pendataan dan waktu masuk
 - Pencarian
-- Filter wilayah, tanggal, kelurahan, SLS, PPL, PML, dan jenis responden
+- Filter kecamatan, tanggal, kelurahan, SLS, PPL, PML, dan jenis responden
 - Pagination
 - Link dokumentasi Google Drive
 - Indikator `LIVE`
@@ -184,7 +185,7 @@ php artisan kartu-kendali:import storage/app/kartu-kendali.csv --sheet=SETU
 
 Header CSV mengikuti nama Google Sheet dan dinormalisasi terhadap kapitalisasi/spasi, misalnya `Nama PPL`, `Nama PML`, dan `Tanggal Pendataan`.
 
-Tanpa `--sheet`, command memakai kolom `source_sheet`, atau memakai nilai `wilayah` sebagai fallback. Jika `external_id` kosong, command membuat identifier SHA-256. Baris duplicate dihitung sebagai gagal/duplicate dan tidak disimpan.
+Tanpa `--sheet`, command memakai kolom `source_sheet`, atau memakai nilai `kecamatan` sebagai fallback. Jika `external_id` kosong, command membuat identifier SHA-256. Baris duplicate dihitung sebagai gagal/duplicate dan tidak disimpan.
 
 Excel belum didukung agar project tidak menambah package yang belum diperlukan. Export Excel sebagai CSV terlebih dahulu.
 
@@ -202,7 +203,7 @@ Pasang script yang sama pada 7 spreadsheet berikut:
 6. PONDOK AREN
 7. SERPONG UTARA
 
-Setiap spreadsheet memiliki `KARTU_WILAYAH` sesuai wilayahnya. Script membaca header secara dinamis dan tidak mengubah spreadsheet.
+Setiap spreadsheet memiliki `KARTU_KECAMATAN` sesuai kecamatannya. Script membaca header secara dinamis dan tidak mengubah spreadsheet.
 
 Trigger utama:
 
@@ -247,8 +248,8 @@ Cakupan feature test API meliputi:
 - payload invalid
 - duplicate
 - daftar data
-- filter wilayah
-- statistik agregat
+- filter kecamatan
+- statistik agregat per kecamatan
 
 Verifikasi dependensi PHP:
 
@@ -303,13 +304,13 @@ Pastikan token Script Properties sama persis dengan `KARTU_KENDALI_API_TOKEN` da
 
 Periksa field wajib:
 
-- `wilayah`
+- `kecamatan`
 - `nama_ppl`
 - `nama_pml`
 - `nama_responden`
 - `source_sheet`
 
-`wilayah` harus salah satu dari 7 wilayah yang didukung.
+`kecamatan` harus salah satu dari 7 kecamatan yang didukung.
 
 ### Data masuk dua kali
 

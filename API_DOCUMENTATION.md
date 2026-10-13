@@ -34,10 +34,10 @@ curl -X POST "http://127.0.0.1:8000/api/kartu-kendali" \
   -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "wilayah": "SETU",
+    "kecamatan": "SETU",
     "timestamp_google": "09/22/2026 08:30:00",
     "tanggal_pendataan": "2026-09-22",
-    "nama_ppl": "Nama PPL",
+    "waktu_pendataan": "2026-09-22 08:30:00",
     "nama_pml": "Nama PML",
     "kelurahan": "Setu",
     "sls": "001",
@@ -61,8 +61,8 @@ Response sukses baru: HTTP `201`.
   "message": "Data kartu kendali berhasil disimpan.",
   "data": {
     "id": 36,
-    "wilayah": "SETU",
-    "external_id": "baris-123"
+    "kecamatan": "SETU",
+    "external_id": "baris-123",
   }
 }
 ```
@@ -89,18 +89,18 @@ Query parameter yang tersedia:
 | `page` | Nomor halaman |
 | `per_page` | 5 sampai 100; default 15 |
 | `search` | Cari nama responden, PPL, PML, kelurahan, atau SLS |
-| `wilayah` | Filter wilayah tepat |
-| `kelurahan` | Filter kelurahan tepat |
-| `sls` | Filter SLS tepat |
-| `ppl` | Filter nama PPL tepat |
-| `pml` | Filter nama PML tepat |
+| `kecamatan` | Filter kecamatan tepat |
+| `kelurahan` | Filter kelurahan tepat sesuai kecamatan |
+| `sls` | Filter SLS tepat sesuai kecamatan |
+| `ppl` | Filter nama PPL tepat sesuai kecamatan |
+| `pml` | Filter nama PML tepat sesuai kecamatan |
 | `jenis_responden` | Filter jenis responden tepat |
 | `tanggal` | Filter tanggal `YYYY-MM-DD` |
 
 Contoh:
 
 ```text
-GET /api/kartu-kendali?wilayah=SETU&search=Responden&page=1&per_page=15
+GET /api/kartu-kendali?kecamatan=SETU&search=Responden&page=1&per_page=15
 ```
 
 Response menggunakan format pagination Laravel:
@@ -123,11 +123,11 @@ Mengembalikan:
 - `total_ppl`
 - `total_pml`
 - `total_sls`
-- `per_wilayah` untuk 7 wilayah
-- `per_wilayah_detail` berisi jumlah data, PPL, PML, dan SLS per wilayah
-- `per_jenis_responden`
-- `filter_options` berisi pilihan unik untuk `ppl`, `pml`, `kelurahan`, dan `sls`
-- `latest`
+- `per_kecamatan` untuk 7 kecamatan
+- `per_kecamatan_detail` berisi jumlah responden, PPL, PML, dan SLS per kecamatan
+- `per_kecamatan_jenis_responden` berisi Keluarga, Usaha, dan Campuran per kecamatan
+- `top_ppl` dan `bottom_ppl` berisi peringkat PPL dengan rincian jenis responden
+- `filter_options` berisi pilihan unik yang mengikuti filter `kecamatan`
 - `updated_at`
 
 ## GET `/api/kartu-kendali/{id}`
